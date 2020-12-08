@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  orders:
+    image: yousell-orders:latest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8082:8080
+  cloud-sql-proxy:
+    image: gcr.io/cloudsql-docker/gce-proxy:1.11
+    # Port: MySQL (3306)
+    command: ./cloud_sql_proxy -instances=nodal-formula-295821:europe-west2:sql-instance=tcp:0.0.0.0:3306
+    volumes:
+    # this mounts your application default credential on the container, preventing the
+    # 'invalid json file "/config": google: read JWT from JSON credentials: 'type' field is "authorized_user" (expected "service_account")'
+    # error if you point to the actual credential file directly
+    - ~/.config:/root/.config
+    # - ${GOOGLE_APPLICATION_CREDENTIALS}:/root/.config
+    ports:
+    - 3306:3306

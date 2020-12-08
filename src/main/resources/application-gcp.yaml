@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    gcp:
+      sql:
+        instance-connection-name: nodal-formula-295821:europe-west2:sql-instance
+        database-name: sql-db
+    appId: nodal-formula-295821
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: nava.arul@gmail.com
+    password: ThatsTam1l
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
