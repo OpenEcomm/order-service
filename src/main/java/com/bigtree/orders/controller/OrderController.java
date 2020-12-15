@@ -59,6 +59,24 @@ public class OrderController {
         return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
+    @GetMapping("/orders/search")
+    public ResponseEntity<Orders> findAllMatch(@RequestParam(required = false) Map<String, String> qparams) {
+        List<Order> orders = null;
+        if (CollectionUtils.isEmpty(qparams)) {
+            log.info("Received request to get all orders");
+            orders = orderRepository.findAll();
+        } else {
+            log.info("Received request to get orders with query {}", qparams.toString());
+            orders = orderService.findOrdersWithQuery(qparams);
+        }
+        List<Order> orderList = new ArrayList<>();
+        if (orders != null) {
+            orders.forEach(orderList::add);
+        }
+        return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
+    }
+
     @GetMapping("/orders/{id}")
     public ResponseEntity<Order> getById(@PathVariable("id") Integer id) {
         log.info("Received request to get order by id {}", id);

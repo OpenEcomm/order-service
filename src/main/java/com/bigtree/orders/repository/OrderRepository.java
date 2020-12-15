@@ -46,6 +46,14 @@ public interface OrderRepository extends CrudRepository<Order, Integer>{
     @Transactional(readOnly = true)
     @Query("SELECT o FROM Order o WHERE o.reference = ?1")
     Collection<Order> findByReference(String reference);
+
+    /**
+	 * Retrieve all <code>Order</code>s from the data store for given query
+	 * @return a <code>Collection</code> of <code>Order</code>s
+	 */
+    @Transactional(readOnly = true)
+    @Query("SELECT o FROM Order o WHERE o.email = ?1 AND o.reference = ?2")
+    Collection<Order> findByQuery(String email, String reference);
     
     /**
 	 * Retrieve all <code>Order</code>s from the data store for given status
