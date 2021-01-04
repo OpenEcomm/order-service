@@ -14,7 +14,11 @@ cd to the project directory
 
 ### RUN cloud sql proxy
 
-- [Download SQL Proxy](https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test)
+- [Download SQL Proxy]
+        1. Instructions to download (https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test)
+        2. For Mac
+         curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
+        
 
 1.  Make the proxy executable:
     chmod +x cloud_sql_proxy
@@ -22,8 +26,12 @@ cd to the project directory
     ./cloud_sql_proxy -instances=nodal-formula-295821:europe-west2:sql-instance=tcp:3306
 
 ### Connect MYSQL from mysql command prompt
+1. Install MySQL Client on Mac
+        brew install mysql
+   
 1.  Connect to your database using the mysql client
     mysql -u <USERNAME> -p --host 127.0.0.1 --port 3306
+    mysql -u root -p --host 127.0.0.1 
 
 ### Run the micro service and Connect MYSQL 
 1. Perform the above steps
