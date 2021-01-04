@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   orders:
-    image: yousell-orders:latest
+    image: openbasket/order-service:latest
     build:
       context: .
       dockerfile: ./Dockerfile

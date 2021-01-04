@@ -56,11 +56,10 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
-// https://mvnrepository.com/artifact/com.google.code.gson/gson
     compile group: 'com.google.code.gson', name: 'gson', version: '2.7'
     testImplementation('org.junit.jupiter:junit-jupiter:5.6.0')
     testImplementation('org.mockito:mockito-junit-jupiter:3.2.4')
-    // testImplementation('com.h2database:h2')
+    testImplementation('com.h2database:h2')
     testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
 
