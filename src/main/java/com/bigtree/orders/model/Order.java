@@ -41,7 +41,7 @@ public class Order extends BaseEntity {
 	@DateTimeFormat(pattern = "dd-mm-yyyy")
 	private LocalDate date;
 
-	@JsonManagedReference
+	// @JsonManagedReference
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER)
 	private Set<OrderItem> items;
 
@@ -66,7 +66,7 @@ public class Order extends BaseEntity {
 	@Column(name = "sub_total", nullable = false)
 	private BigDecimal subTotal;
 
-	@Column(name = "totalCost", nullable = false)
+	@Column(name = "total_cost", nullable = false)
 	private BigDecimal totalCost;
 
 	@Enumerated(EnumType.STRING)

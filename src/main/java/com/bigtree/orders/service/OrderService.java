@@ -17,7 +17,6 @@ import com.bigtree.orders.model.request.UpdateStatus;
 import com.bigtree.orders.repository.ItemRepository;
 import com.bigtree.orders.repository.OrderRepository;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +38,10 @@ public class OrderService {
     public String create(Order order) {
         Set<OrderItem> items = new HashSet<>(order.getItems());
         log.info("Saving order with {} items", items.size());
-        order.setItems(null);
+        for (OrderItem orderItem : items) {
+            orderItem.setOrder(order);
+        }
+        // order.setItems(null);
         Long countByDate = orderRepository.countByDate(LocalDate.now());
         order.setReference(buildOrderReference(countByDate.intValue()));
         order.setStatus(OrderStatus.CREATED);
@@ -53,13 +55,12 @@ public class OrderService {
                 orderItem.setOrder(saved);
             }
             itemRepository.saveAll(items);
-            Thread t = new Thread(new Runnable() {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     sendOrderConfirmation(order);
                 }
-            });
-            t.start();
+            }).start();
             return saved.getReference();
         } else {
             log.error("Order not created for user {}", order.getEmail());

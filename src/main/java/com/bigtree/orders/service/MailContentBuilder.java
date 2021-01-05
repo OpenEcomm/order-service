@@ -1,5 +1,6 @@
 package com.bigtree.orders.service;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.messageresolver.IMessageResolver;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
@@ -24,22 +24,15 @@ public class MailContentBuilder {
     @Qualifier("htmlTemplateResolver")
     ITemplateResolver htmlTemplateResolver;
 
-    @Autowired
-    @Qualifier("textTemplateResolver")
-    ITemplateResolver textTemplateResolver;
-
-    @Autowired
-    IMessageResolver messageResolver;
-
     private boolean templateEngineInitialized;
 
     public String build(String template, Map<String,Object> params) {
         if (! this.templateEngineInitialized){
             templateEngine.setTemplateResolver(htmlTemplateResolver);
-            templateEngine.setMessageResolver(messageResolver);
             this.templateEngineInitialized = true;
         }
         Context context = new Context();
+        context.setLocale(Locale.UK);
         if (!CollectionUtils.isEmpty(params)){
             context.setVariables(params);
             params.forEach((k,v) -> {
