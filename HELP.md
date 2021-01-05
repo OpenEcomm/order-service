@@ -4,44 +4,55 @@ A RESTful service exposing endpoints for Orders, Baskets
 
 Stores the orders, baskets in a SQL database hosted in Google Cloud.
 
-Clone the project from repository using GIT
-cd to the project directory
+## Step1: Clone the project
+`git clone https://github.com/project-openbasket/order-service.git` to your project directory
+`git clone https://github.com/project-openbasket/utilities.git` to your project directory
 
-### Configure Service Account Access
+## Step2: Configure Cloud SQL access 
+Cloud SQL is accessed by order microservice to store orders and related records
+To access Cloud SQL we need Cloud SQL Proxy. Read more about this here: https://cloud.google.com/sql/docs/mysql/sql-proxy
+
+### Installing the Cloud SQL Proxy
+Download the proxy for Mac to your favourite directory on your computer
+
+`curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64`
+
+For Windows
+`Right-click https://dl.google.com/cloudsql/cloud_sql_proxy_x64.exe and select Save Link As to download the proxy. Rename the file to cloud_sql_proxy.exe.`
+
+### Using a service account for authentication
 1. Download key file for the service account which has roles to access the CloudSQL
 2. Export environment variable as below
-        export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key/file.json
+        `export GOOGLE_APPLICATION_CREDENTIALS=/path/to/key/file.json`
+3. Also copy the json key file to ~/.config/gcloud. If this directory not exist then create one
+4. Raname the ~/.config/gcloud/key.json to ~/.config/gcloud/application_default_credentials.json
+5. Make sure it all setup properly by running below command
+   `gcloud auth application-default print-access-token`
+   It should print the access token
 
-### RUN cloud sql proxy
-
-- [Download SQL Proxy]
-        1. Instructions to download (https://cloud.google.com/sql/docs/mysql/quickstart-proxy-test)
-        2. For Mac
-         curl -o cloud_sql_proxy https://dl.google.com/cloudsql/cloud_sql_proxy.darwin.amd64
-        
-
-1.  Make the proxy executable:
-    chmod +x cloud_sql_proxy
+## Step3: Test Connection to Cloud SQL via Proxy
+Now we have downloaded Cloud SQL proxy and installed also setup the service account access. Lets run the connection test     
+### Run the Cloud SQL Proxy
+1.  Make the cloud_sql_proxy executable:
+    `chmod +x cloud_sql_proxy`
 2.  Run the Cloud SQL Proxy for database connections
-    ./cloud_sql_proxy -instances=nodal-formula-295821:europe-west2:sql-instance=tcp:3306
+    `./cloud_sql_proxy -instances=nodal-formula-295821:europe-west2:sql-instance=tcp:3306`
 
-### Connect MYSQL from mysql command prompt
+### Install MYSQL 
 1. Install MySQL Client on Mac
-        brew install mysql
+        `brew install mysql`
    
-1.  Connect to your database using the mysql client
-    mysql -u <USERNAME> -p --host 127.0.0.1 --port 3306
-    mysql -u root -p --host 127.0.0.1 
+1.  Connect to your SQL proxy database using the mysql client
+    `mysql -u <USERNAME> -p --host 127.0.0.1 --port 3306`
+    `mysql -u root -p --host 127.0.0.1 --port 3306`
 
 ### Run the micro service and Connect MYSQL 
-1. Perform the above steps
-2. cd [project-dir for order-service]
-3. Build the project
-        gradle clean build
-4. Run the spring boot service
-        SPRING_PROFILES_ACTIVE=proxy gradle bootRun
+1. Build the project
+        `gradle clean build`
+2. Run the spring boot service
+        `SPRING_PROFILES_ACTIVE=local gradle bootRun`
 
-### How to connect to MYSQL with cloud sql proxy as docker image
+# How to connect to Cloud SQL with cloud sql proxy as a docker image
 
 1. Run the following docker command
         docker run  \
@@ -50,20 +61,26 @@ cd to the project directory
         gcr.io/cloudsql-docker/gce-proxy:1.16 /cloud_sql_proxy \
         -instances=nodal-formula-295821:europe-west2:sql-instance=tcp:127.0.0.1:3306 -credential_file=/config
 2. To Connect to your database using the mysql client
-        mysql -u <USERNAME> -p --host 127.0.0.1 --port 3306
-3. To connect from microservice
+        mysql -u root -p --host 127.0.0.1 --port 3306
+3. To connect from the order microservice
         SPRING_PROFILES_ACTIVE=proxy gradle bootRun
 
-### How to connect to MYSQL with cloud sql proxy as docker image from docker-compose
+# Run the orderservice and Cloud SQL Proxy from docker-compose
 
-1. Build the project
-        gradle clean build
-2. Copy the key.json file to ~/.config/gcloud
-3. Rename the file to application_default_credentials.json
-4. Build the docker images from docker-compose file
-        docker-compose build
-3. RUN containers
-        docker-compose up
+1. Stop previously running microservice instance and docker containers
+        `docker ps` -- to list running docker containers
+        `docker stop {container-id}` -- Stop the container
+        `docker rm {container-id}` -- Remove the container
+2. Build the project artifact
+        `gradle clean build`
+3. Build docker image. If the source code changed
+        `./docker-build.sh`  -- It produces new docker image for the service
+3. Run the containers(order-service, cloud-sql-proxy) from docker-compose file
+       `${project-dir}/utilities/docker-compose up`
+
+# Call Order Service Endpoints
+1. Order service listen on port 8082 for connections
+2. Import Postman collections from ${project-dir}/utilities into your postman
 
 ### Reference Documentation
 
