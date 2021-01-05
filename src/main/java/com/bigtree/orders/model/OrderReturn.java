@@ -28,7 +28,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "returns")
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper=false)
 public class OrderReturn extends BaseEntity {
     
     @Column(name="order_id", nullable = false)
