@@ -1,3 +1,6 @@
+jasypt:
+  encryptor:
+    password: openbasketsecret
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/sql-db
@@ -13,7 +16,7 @@ spring:
     default-encoding: UTF-8
     host: smtp.gmail.com
     username: project.openbasket@gmail.com
-    password: BehindW@@ds123
+    password: ENC(U6sV6o0flVm5VYuj457AmN4j9JUfAbD2)
     port: 587
     properties:
       mail:

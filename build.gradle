@@ -16,6 +16,10 @@ configurations {
 
 repositories {
     mavenCentral()
+     // Add below
+    maven  {
+       url 'https://repo.spring.io/libs-milestone'
+    }
 }
 
 ext {
@@ -34,6 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:2.0.0'
     // Enable gcp-sql below only when deployment. For local keep this commented out
     // implementation 'org.springframework.cloud:spring-cloud-gcp-starter-sql-mysql'
     // implementation 'javax.cache:cache-api'
