@@ -51,7 +51,7 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(mailContentBuilder.build(template, params), true);
             javaMailSender.send(mimeMessage);
-            log.info("Order confirmation email sent!");
+            log.info("Order confirmation email sent to {}", to);
         } catch (MessagingException e) {
             log.error("Order confirmation email not sent!");
         }

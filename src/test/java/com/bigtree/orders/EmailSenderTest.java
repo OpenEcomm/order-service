@@ -36,7 +36,14 @@ public class EmailSenderTest {
         order = Order.builder()
                 .address(Address.builder().lineNumber1("1234, Galston Avenue").lineNumber2("Newton Mearns").city("Glasgow")
                         .country("GB").postCode("G775SF").build())
-                .date(LocalDate.now()).email("bigtree.it.services@gmail.com").reference("206-8383367-9036364").status(OrderStatus.CREATED)
+                .date(LocalDate.now())
+                .email("bigtree.it.services@gmail.com")
+                .reference("206-8383367-9036364")
+                .status(OrderStatus.CREATED)
+                .shippingCost(new BigDecimal(5.00))
+                .saleTax(BigDecimal.TEN)
+                .subTotal(BigDecimal.TEN)
+                .currency("GBP")
                 .build();
         order.setId(1);
         OrderItem item = new OrderItem();
@@ -62,10 +69,9 @@ public class EmailSenderTest {
     public void testSendEmail() {
         Map<String, Object> params = new HashMap<>();
         params.put("order", order);
-        params.put("count", order.getItems().size());
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         Calendar cal = Calendar.getInstance();
         params.put("today", dateFormat.format(cal.getTime()));
-        emailService.sendMail("bigtree.it.services@gmail.com", "OpenBasket.com", "order", params);
+        emailService.sendMail("bigtree.it.services@gmail.com", "Your OpenBasket order #" + order.getReference(), "order", params);
     }
 }
