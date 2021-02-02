@@ -41,7 +41,7 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @GetMapping("/orders")
     public ResponseEntity<Orders> orders(@RequestParam(required = false) Map<String, String> qparams) {
         List<Order> orders = null;
@@ -59,7 +59,7 @@ public class OrderController {
         return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @GetMapping("/orders/search")
     public ResponseEntity<Orders> findAllMatch(@RequestParam(required = false) Map<String, String> qparams) {
         List<Order> orders = null;
@@ -101,7 +101,7 @@ public class OrderController {
                 .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("Order").id(id).build());
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost")
     @PostMapping("/orders")
     public ResponseEntity<OrderCreateResponse> create(@RequestBody Order order) {
         log.info("Received request to create new order. {}", order);
