@@ -49,11 +49,11 @@ public class OrderController {
             log.info("Received request to get all orders");
             orders = orderRepository.findAll();
         } else {
-            log.info("Received request to get orderd with query {}", qparams.toString());
+            log.info("Received request to get ordered with query {}", qparams.toString());
             orders = orderService.findOrdersWithQuery(qparams);
         }
         List<Order> orderList = new ArrayList<>();
-        if (orders != null) {
+        if (!CollectionUtils.isEmpty(orders)) {
             orders.forEach(orderList::add);
         }
         return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
