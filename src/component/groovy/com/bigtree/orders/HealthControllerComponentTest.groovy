@@ -31,7 +31,7 @@ class HealthControllerComponentTest extends Specification {
 
         then: 'Expect health response 200 OK'
         resultActions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-                .andExpect(MockMvcResultMatchers.content().string("Up and Running"))
+                .andExpect(MockMvcResultMatchers.jsonPath('$.status').value("UP"))
     }
 }
 

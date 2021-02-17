@@ -26,3 +26,32 @@ spring:
             enable: true
     protocol: smtp
     test-connection: false
+
+server:
+  servlet:
+    context-path: /orders/v1
+  compression:
+    enabled: true
+    mime-types: application/json,text/html,text/xml,text/plain,text/css,text/javascript
+
+management:
+  info:
+    defaults:
+      enabled: false
+  endpoints:
+    web:
+      base-path: '/'
+      exposure:
+        include: metrics,health,refresh,info
+  endpoint:
+    info:
+      enabled: true
+    metrics:
+      enabled: true
+    refresh:
+      enabled: true
+    prometheus:
+      enabled: true
+
+
+
