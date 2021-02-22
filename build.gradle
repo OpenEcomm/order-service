@@ -69,6 +69,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     implementation 'org.apache.commons:commons-lang3:3.10'
     implementation 'org.apache.commons:commons-collections4:4.4'
+    implementation group: 'com.stripe', name: 'stripe-java', version: '20.37.0'
     compile group: 'com.google.guava', name: 'guava', version: '23.0'
 
     compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'

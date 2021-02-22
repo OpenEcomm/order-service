@@ -9,3 +9,11 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+
+stripe:
+  private:
+    key: sk_test_51IL6YhCYSHJV743tsokBEqMmHt5JA9u42iLloHOQuPo03pYfCfv3suMeemJv5RXALwkg1PVCeV0mx3va24Gjn9Bx00PhLz22Io
+  success:
+    url: http://localhost:4200/checkout/success
+  cancel:
+    url: http://localhost:4200/checkout/failure

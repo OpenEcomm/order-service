@@ -11,6 +11,7 @@ import java.util.Map;
 import com.bigtree.orders.model.Address;
 import com.bigtree.orders.model.Order;
 import com.bigtree.orders.model.OrderItem;
+import com.bigtree.orders.model.enums.Currency;
 import com.bigtree.orders.model.enums.OrderStatus;
 import com.bigtree.orders.service.EmailService;
 import com.google.common.collect.Sets;
@@ -44,7 +45,7 @@ public class EmailSenderTest {
                 .expectedDeliveryDate(LocalDate.now())
                 .saleTax(BigDecimal.TEN)
                 .subTotal(BigDecimal.TEN)
-                .currency("£")
+                .currency(Currency.GBP)
                 .totalCost(new BigDecimal("105.10"))
                 .build();
         order.setId(1);

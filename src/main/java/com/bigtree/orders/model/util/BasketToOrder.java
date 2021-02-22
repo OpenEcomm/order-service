@@ -15,12 +15,7 @@ public class BasketToOrder {
     public static Order fromBasket(Basket basket) {
         if (basket != null) {
             return Order.builder()
-            .address(basket.getAddress())
-            .currency(basket.getCurrency())
             .email(basket.getEmail())
-            .saleTax(basket.getSaleTax())
-            .shippingCost(basket.getShippingCost())
-            .expectedDeliveryDate(basket.getExpectedDeliveryDate())
             .build();
         }
         return null;

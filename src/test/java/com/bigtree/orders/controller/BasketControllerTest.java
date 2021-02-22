@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import com.bigtree.orders.model.Address;
 import com.bigtree.orders.model.Basket;
 import com.bigtree.orders.model.BasketItem;
+import com.bigtree.orders.model.enums.Currency;
 import com.bigtree.orders.repository.BasketRepository;
 import com.bigtree.orders.service.BasketService;
 import com.google.common.collect.Lists;
@@ -45,14 +46,7 @@ public class BasketControllerTest {
     @BeforeEach
     public void init() {
         Basket basket = Basket.builder()
-                .address(Address.builder().lineNumber1("lineNumber1").lineNumber2("lineNumber2").city("city")
-                        .country("GB").postCode("ABC1234").build())
                 .date(LocalDate.now()).email("user@gmail.com")
-                .currency("GBP")
-                .expectedDeliveryDate(LocalDate.now())
-                .saleTax(BigDecimal.TEN)
-                .shippingCost(BigDecimal.TEN)
-                .subTotal(BigDecimal.valueOf(100))
                 .totalCost(BigDecimal.TEN)
                 .build();
         basket.setId(1);

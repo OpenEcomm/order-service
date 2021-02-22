@@ -41,7 +41,7 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @CrossOrigin(origins = "http://localhost")
+    @CrossOrigin(origins = "*")
     @GetMapping("/orders")
     public ResponseEntity<Orders> orders(@RequestParam(required = false) Map<String, String> qparams) {
         List<Order> orders = null;
