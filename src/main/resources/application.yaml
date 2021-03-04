@@ -3,9 +3,9 @@ jasypt:
     password: openbasketsecret
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sql-db
-    driverClassName: com.mysql.jdbc.Driver
-    username: root
+    url: jdbc:mysql://${ORDERS_DB_HOST:localhost}:${ORDERS_DB_PORT:3306}/${ORDERS_DB_NAME:orders-db}
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: ${ORDERS_DB_USER:root}
     password:
   jpa:
     database: mysql
@@ -15,7 +15,7 @@ spring:
   mail:
     default-encoding: UTF-8
     host: smtp.gmail.com
-    username: project.openbasket@gmail.com
+    username: ${ORDERS_MAIL_ID:project.openbasket@gmail.com}
     password: ENC(U6sV6o0flVm5VYuj457AmN4j9JUfAbD2)
     port: 587
     properties:
@@ -29,7 +29,7 @@ spring:
 
 server:
   servlet:
-    context-path: /orders/v1
+    context-path: ${ORDERS_CONTEXT_PATH:/orders/v1}
   compression:
     enabled: true
     mime-types: application/json,text/html,text/xml,text/plain,text/css,text/javascript
@@ -55,12 +55,12 @@ management:
 
 stripe:
   private:
-    key: sk_test_51IL6YhCYSHJV743tsokBEqMmHt5JA9u42iLloHOQuPo03pYfCfv3suMeemJv5RXALwkg1PVCeV0mx3va24Gjn9Bx00PhLz22Io
+    key: ${STRIPE_SECRET_KEY:sk_test_51IL6YhCYSHJV743tsokBEqMmHt5JA9u42iLloHOQuPo03pYfCfv3suMeemJv5RXALwkg1PVCeV0mx3va24Gjn9Bx00PhLz22Io}
   success:
-    url: http://localhost:4200/checkout/success
+    url: ${STRIPE_SUCCESS_URL:http://localhost:4200/checkout/success}
   cancel:
-    url: http://localhost:4200/checkout/failure
-  currency: gbp
+    url: ${STRIPE_CANCEL_URL:http://localhost:4200/checkout/failure}
+  currency: ${STRIPE_CURRENCY:gbp}
 
 
 
