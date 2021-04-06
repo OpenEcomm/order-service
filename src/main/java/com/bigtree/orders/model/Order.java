@@ -2,10 +2,26 @@ package com.bigtree.orders.model;
 
 import com.bigtree.orders.model.enums.Currency;
 import com.bigtree.orders.model.enums.OrderStatus;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.Column;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
+import javax.persistence.Embedded;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.AttributeOverride;
+
 import javax.validation.constraints.NotEmpty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -37,7 +53,7 @@ public class Order extends BaseEntity {
 
 	@Column(name = "currency", nullable = false)
 	@NotEmpty
-	private Currency currency;
+	private String currency;
 
 	@Column(name = "shipping_cost", nullable = false)
 	private BigDecimal shippingCost;
@@ -72,4 +88,21 @@ public class Order extends BaseEntity {
 	@DateTimeFormat(pattern = "dd-mm-yyyy")
 	private LocalDate expectedDeliveryDate;
 
+	@Override
+	public String toString() {
+		return "Order{" +
+				"date=" + date +
+				", items=" + items +
+				", email='" + email + '\'' +
+				", reference='" + reference + '\'' +
+				", currency='" + currency + '\'' +
+				", shippingCost=" + shippingCost +
+				", saleTax=" + saleTax +
+				", subTotal=" + subTotal +
+				", totalCost=" + totalCost +
+				", status=" + status +
+				", address=" + address +
+				", expectedDeliveryDate=" + expectedDeliveryDate +
+				'}';
+	}
 }

@@ -16,6 +16,7 @@ import lombok.Setter;
 public class ActionResponse {
     
     private String object;
+    private String uniqueId;
     private Integer id;
     private Action action;
     private boolean status;

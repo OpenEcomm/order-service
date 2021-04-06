@@ -2,6 +2,7 @@ package com.bigtree.orders.controller;
 
 import com.bigtree.orders.model.Basket;
 import com.bigtree.orders.model.BasketItem;
+import com.bigtree.orders.model.request.PaymentIntentRequest;
 import com.bigtree.orders.model.response.PaymentIntentResponse;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
@@ -74,13 +75,14 @@ public class StripeCheckoutController {
 
     @CrossOrigin(origins = "*")
     @PostMapping("/create-payment-intent")
-    private ResponseEntity<PaymentIntentResponse> createPaymentIntent(@RequestBody Basket basket) {
-        log.info("Received request create Payment Intent user: {}", basket.getEmail());
+    private ResponseEntity<PaymentIntentResponse> createPaymentIntent(@RequestBody PaymentIntentRequest request) {
         Stripe.apiKey = stripeKey;
+        long totalCost = request.getSubTotal() + request.getDeliveryCost() + request.getPackagingCost() + request.getSaleTax();
+        log.info("Received request create Payment Intent for amount {} pence.",totalCost);
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
                         .setCurrency(currency)
-                        .setAmount(basket.getTotalCost().longValue() *100)
+                        .setAmount(totalCost)
                         // Verify your integration in this guide by including this parameter
                         .putMetadata("integration_check", "accept_a_payment")
                         .build();
@@ -99,7 +101,7 @@ public class StripeCheckoutController {
                     .metaData(intent.getMetadata())
                     .chargesUrl(intent.getCharges().getUrl())
                     .build();
-            log.info("Returning payment intent for user: {}", basket.getEmail());
+            log.info("Returning payment intent for amount: {}, Id: {}", intent.getAmount(), intent.getId());
             return ResponseEntity.ok(response);
         } catch (StripeException e) {
             log.error("Unable to create payment intent {}", e.getMessage());

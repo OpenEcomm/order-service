@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.bigtree.orders.model.Order;
 import com.bigtree.orders.model.OrderItem;
+import com.bigtree.orders.model.enums.Currency;
 import com.bigtree.orders.model.enums.OrderStatus;
 import com.bigtree.orders.model.request.UpdateStatus;
 import com.bigtree.orders.repository.ItemRepository;
@@ -47,6 +48,9 @@ public class OrderService {
         order.setStatus(OrderStatus.CREATED);
         if (order.getDate() == null) {
             order.setDate(LocalDate.now());
+        }
+        if ( order.getCurrency() == null){
+            order.setCurrency("GBP");
         }
         Order saved = orderRepository.save(order);
         if (saved != null) {
@@ -119,7 +123,7 @@ public class OrderService {
         qParams.forEach((k, v) -> {
             if (k.equalsIgnoreCase("email")) {
                 log.info("Looking for orders with email {}", v);
-                result.addAll(orderRepository.findByEmail(v));
+                result.addAll(orderRepository.findByEmailOrderByDateDesc(v));
             } else if (k.equalsIgnoreCase("reference")) {
                 log.info("Looking for orders with reference {}", v);
                 result.addAll(orderRepository.findByReference(v));

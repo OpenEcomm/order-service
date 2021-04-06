@@ -1,6 +1,7 @@
 package com.bigtree.orders.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bigtree.orders.model.Basket;
 
@@ -28,6 +29,13 @@ public interface BasketRepository extends CrudRepository<Basket, Integer>{
     @Transactional(readOnly = true)
     Basket findByEmail(String email);
 
+	/**
+	 * Retrieve <code>Basket</code>s from the data store for given user's email and BasketId
+	 * @return a <code>Basket</code>
+	 */
+	@Transactional(readOnly = true)
+	Basket findByEmailAndBasketId(String email, String basketId);
+
     /**
 	 * Retrieve all <code>Basket</code>s from the data store.
 	 * @return a <code>Collection</code> of <code>Basket</code>s
@@ -35,4 +43,11 @@ public interface BasketRepository extends CrudRepository<Basket, Integer>{
     @Transactional(readOnly = true)
     @Query("SELECT b FROM Basket b")
 	List<Basket> findAll() throws DataAccessException;
+
+	/**
+	 * Retrieve <code>Basket</code>s from the data store for given BasketId
+	 * @return a <code>Basket</code>
+	 */
+	@Transactional(readOnly = true)
+	Optional<Basket> findByBasketId(String basketId);
 }

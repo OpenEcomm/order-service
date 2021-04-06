@@ -1,6 +1,5 @@
 package com.bigtree.orders
 
-import com.bigtree.orders.model.Basket
 import org.json.JSONObject
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -19,18 +18,18 @@ import java.time.LocalDate
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-class StripeCheckoutComponentTest extends Specification{
+class StripeCheckoutComponentTest extends Specification {
 
     @Autowired
     MockMvc mockMvc
 
-    def 'Generate Stripe Payment Intent'(){
+    def 'Generate Stripe Payment Intent'() {
         given:
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json")
         JSONObject body = new JSONObject().put("data", LocalDate.now());
 
-        String content = Fixtures.getFixture("basket.json");
+        String content = Fixtures.getFixture("payment-intent-request.json");
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/create-payment-intent").headers(headers).content(content)
 
         when: 'POST call to /create-payment-intent endpoint'
@@ -46,19 +45,4 @@ class StripeCheckoutComponentTest extends Specification{
                 .andExpect(MockMvcResultMatchers.jsonPath('$.paymentMethod').value("card"))
     }
 
-    def 'Generate Stripe Checkout Session'(){
-        given:
-        HttpHeaders headers = new HttpHeaders()
-        headers.add("Content-Type", "application/json")
-
-        JSONObject body = new JSONObject().put("data", LocalDate.now());
-        String content = Fixtures.getFixture("basket.json");
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/create-checkout-session").headers(headers).content(content)
-
-        when: 'POST call to /create-checkout-session endpoint'
-        ResultActions resultActions = mockMvc.perform(request)
-
-        then: 'Expect  response 200 OK'
-        resultActions.andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
-    }
 }

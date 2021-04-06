@@ -4,18 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -38,15 +28,29 @@ public class Basket extends BaseEntity{
 	@DateTimeFormat(pattern = "dd-mm-yyyy")
 	private LocalDate date;
 
-	@JsonManagedReference
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "basket", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "basket", fetch = FetchType.EAGER)
 	private Set<BasketItem> items;
+
+	@Column(name = "basket_id", nullable = false)
+	private String basketId;
 
 	@Column(name = "email", nullable = false)
 	@NotEmpty
 	private String email;
 
-	@Column(name = "total_cost", nullable = false)
-	private BigDecimal totalCost;
+	@Column(name = "order_reference")
+	private String orderReference;
 
+	@Column(name = "total", nullable = false)
+	private BigDecimal total;
+
+	public void dismissChild(BasketItem child) {
+		this.items.remove(child);
+	}
+
+	@PreRemove
+	public void dismissChildren() {
+		this.items.forEach(child -> child.dismissParent()); // SYNCHRONIZING THE OTHER SIDE OF RELATIONSHIP
+		this.items.clear();
+	}
 }

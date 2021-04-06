@@ -29,10 +29,10 @@ public class OrderServiceTest {
     @Test
     @Transactional(readOnly = true)
     public void shouldFindOrderByEmail() {
-        List<Order> orders = orderRepository.findByEmail("nava.arul@gmail.com");
+        List<Order> orders = orderRepository.findByEmailOrderByDateDesc("nava.arul@gmail.com");
         // assertThat(orders).(1);
 
-        orders = orderRepository.findByEmail("nava.arul@nodomain.com");
+        orders = orderRepository.findByEmailOrderByDateDesc("nava.arul@nodomain.com");
         assertThat(orders).isEmpty();
 
     }

@@ -45,7 +45,7 @@ public class EmailSenderTest {
                 .expectedDeliveryDate(LocalDate.now())
                 .saleTax(BigDecimal.TEN)
                 .subTotal(BigDecimal.TEN)
-                .currency(Currency.GBP)
+                .currency(Currency.GBP.name())
                 .totalCost(new BigDecimal("105.10"))
                 .build();
         order.setId(1);

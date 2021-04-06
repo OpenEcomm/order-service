@@ -31,9 +31,12 @@ public class OrderItem extends BaseEntity{
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = false )
-    // @JsonBackReference
     private Order order;
-    
+
+    @Column(name = "image", nullable = false, columnDefinition = "varchar(255) default '/assets/icons/product-image.png'")
+    @NotEmpty
+    private String image;
+
     @Column(name = "product_id", nullable = false)
     @NotEmpty
     private String productId;

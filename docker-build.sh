@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t gcr.io/nodal-formula-295821/openbasket/order-service:v1 .
+docker build -t openecomm/order-service:v1 .

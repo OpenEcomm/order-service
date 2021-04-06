@@ -3,7 +3,7 @@ jasypt:
     password: openbasketsecret
 spring:
   datasource:
-    url: jdbc:mysql://${ORDERS_DB_HOST:localhost}:${ORDERS_DB_PORT:3306}/${ORDERS_DB_NAME:orders-db}
+    url: jdbc:mysql://${ORDERS_DB_HOST:localhost}:${ORDERS_DB_PORT:3306}/${ORDERS_DB_NAME:ordersdb}
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${ORDERS_DB_USER:root}
     password:

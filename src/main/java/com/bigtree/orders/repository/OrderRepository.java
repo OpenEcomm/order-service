@@ -37,7 +37,7 @@ public interface OrderRepository extends CrudRepository<Order, Integer>{
 	 * @return a <code>Collection</code> of <code>Order</code>s
 	 */
     @Transactional(readOnly = true)
-    List<Order> findByEmail(String email);
+    List<Order> findByEmailOrderByDateDesc(String email);
 
     /**
 	 * Retrieve all <code>Order</code>s from the data store for given reference
@@ -53,7 +53,7 @@ public interface OrderRepository extends CrudRepository<Order, Integer>{
 	 */
     @Transactional(readOnly = true)
     @Query("SELECT o FROM Order o WHERE o.email = ?1 AND o.reference = ?2")
-    Collection<Order> findByQuery(String email, String reference);
+    Collection<Order> findByQueryOrderByDateDesc(String email, String reference);
     
     /**
 	 * Retrieve all <code>Order</code>s from the data store for given status
@@ -77,5 +77,5 @@ public interface OrderRepository extends CrudRepository<Order, Integer>{
 	 */
     @Transactional(readOnly = true)
     @Query("SELECT o FROM Order o WHERE o.deleted = 'false'")
-	List<Order> findAll() throws DataAccessException;
+	List<Order> findAllOrderByDateDesc() throws DataAccessException;
 }

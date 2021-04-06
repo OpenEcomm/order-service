@@ -43,29 +43,29 @@ public class OrderController {
 
     @CrossOrigin(origins = "*")
     @GetMapping("/orders")
-    public ResponseEntity<Orders> orders(@RequestParam(required = false) Map<String, String> qparams) {
-        List<Order> orders = null;
+    public ResponseEntity<List<Order>> orders(@RequestParam(required = false) Map<String, String> qparams) {
+        List<Order> orders = new ArrayList<>();
         if (CollectionUtils.isEmpty(qparams)) {
             log.info("Received request to get all orders");
-            orders = orderRepository.findAll();
+            orders = orderRepository.findAllOrderByDateDesc();
         } else {
             log.info("Received request to get ordered with query {}", qparams.toString());
             orders = orderService.findOrdersWithQuery(qparams);
         }
-        List<Order> orderList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(orders)) {
-            orders.forEach(orderList::add);
+        if (CollectionUtils.isEmpty(orders)) {
+            orders = new ArrayList<>();
         }
-        return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
+        log.info("Returning {} orders", orders.size());
+        return ResponseEntity.ok().body(orders);
     }
 
-    @CrossOrigin(origins = "http://localhost")
+    @CrossOrigin(origins = "*")
     @GetMapping("/orders/search")
     public ResponseEntity<Orders> findAllMatch(@RequestParam(required = false) Map<String, String> qparams) {
         List<Order> orders = null;
         if (CollectionUtils.isEmpty(qparams)) {
             log.info("Received request to get all orders");
-            orders = orderRepository.findAll();
+            orders = orderRepository.findAllOrderByDateDesc();
         } else {
             log.info("Received request to get orders with query {}", qparams.toString());
             orders = orderService.findOrdersWithQuery(qparams);
@@ -77,6 +77,7 @@ public class OrderController {
         return ResponseEntity.ok().body(Orders.builder().orders(orders).build());
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/orders/{id}")
     public ResponseEntity<Order> getById(@PathVariable("id") Integer id) {
         log.info("Received request to get order by id {}", id);
@@ -84,6 +85,7 @@ public class OrderController {
         return ResponseEntity.ok().body(order.isPresent() ? order.get() : null);
     }
 
+    @CrossOrigin(origins = "*")
     @PutMapping("/orders/{id}")
     public ResponseEntity<ActionResponse> updateStatus(@RequestBody UpdateStatus status,
             @PathVariable("id") Integer id) {
@@ -101,10 +103,10 @@ public class OrderController {
                 .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("Order").id(id).build());
     }
 
-    @CrossOrigin(origins = "http://localhost")
+    @CrossOrigin(origins = "*")
     @PostMapping("/orders")
     public ResponseEntity<OrderCreateResponse> create(@RequestBody Order order) {
-        log.info("Received request to create new order. {}", order);
+        log.info("Received request to create new order. {}", order.toString());
         String reference = orderService.create(order);
         if (!StringUtils.isEmpty(reference)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(

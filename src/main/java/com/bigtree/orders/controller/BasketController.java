@@ -16,14 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,46 +30,43 @@ public class BasketController {
     @Autowired
     BasketService basketService;
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/baskets")
-    public ResponseEntity<Baskets> baskets(@RequestParam(required = false) Map<String, String> qParams) {
+    public ResponseEntity<List<Basket>> baskets(@RequestParam(required = false) Map<String, String> qParams) {
         List<Basket> baskets = null;
         if (CollectionUtils.isEmpty(qParams)) {
             log.info("Received request to get all baskets");
             baskets = basketRepository.findAll();
         } else {
-            log.info("Received request to get orders with query {}", qParams.toString());
-            baskets = basketService.findOrdersWithQuery(qParams);
+            log.info("Received request to get baskets with query {}", qParams.toString());
+            baskets = basketService.findBaskets(qParams);
         }
         List<Basket> basketList = new ArrayList<>();
         if (baskets != null) {
             baskets.forEach(basketList::add);
         }
-        return ResponseEntity.ok().body(Baskets.builder().baskets(baskets).build());
+        log.info("Returning {} baskets ", basketList.size());
+        return ResponseEntity.ok().body(basketList);
     }
 
-    @GetMapping("/baskets/{id}")
-    public ResponseEntity<Basket> getById(@PathVariable("id") Integer id) {
-        log.info("Received request to get order by id {}", id);
-        Optional<Basket> basketOptional = basketRepository.findById(id);
-        return ResponseEntity.ok().body(basketOptional.isPresent() ? basketOptional.get() : null);
+    @CrossOrigin(origins = "*")
+    @PutMapping("/baskets")
+    public ResponseEntity<ActionResponse> updateBasket(@RequestBody Basket basket, @RequestParam("basketId") String basketId, @RequestParam("createIfNew") boolean createIfNew) {
+        log.info("Received request to update basket {}", basketId);
+        boolean updated = basketService.updateBasket(basketId, basket, createIfNew);
+        return ResponseEntity.ok().body(ActionResponse.builder().action(Action.UPDATE).status(updated).object("Basket").build());
     }
 
-    @PutMapping("/baskets/{id}")
-    public ResponseEntity<ActionResponse> updateStatus(@RequestBody Basket basket, @PathVariable("id") Integer id) {
-        log.info("Received request to update basket {}", id);
-        boolean updated = basketService.updateBasket(id, basket);
+    @CrossOrigin(origins = "*")
+    @DeleteMapping("/baskets")
+    public ResponseEntity<ActionResponse> delete(@RequestParam("basketId") String basketId) {
+        log.info("Received request to delete basket by id {}", basketId);
+        boolean deleted = basketService.deleteById(basketId);
         return ResponseEntity.ok()
-                .body(ActionResponse.builder().action(Action.UPDATE).status(updated).object("Bakset").id(id).build());
+                .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("basket").uniqueId(basketId).build());
     }
 
-    @DeleteMapping("/baskets/{id}")
-    public ResponseEntity<ActionResponse> delete(@PathVariable("id") Integer id) {
-        log.info("Received request to delete order by id {}", id);
-        boolean deleted = basketService.deleteById(id);
-        return ResponseEntity.ok()
-                .body(ActionResponse.builder().action(Action.DELETE).status(deleted).object("Order").id(id).build());
-    }
-
+    @CrossOrigin(origins = "*")
     @PostMapping("/baskets")
     public ResponseEntity<Void> create(@RequestBody Basket basket) {
         log.info("Received request to create new basket. {}", basket);
