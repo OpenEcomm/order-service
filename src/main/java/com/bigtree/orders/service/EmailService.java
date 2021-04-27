@@ -40,7 +40,7 @@ public class EmailService {
         Calendar cal = Calendar.getInstance();
         params.put("today", dateFormat.format(cal.getTime()));
         params.put("deliveryDate", dateFormat.format(cal.getTime()));
-        sendMail(order.getEmail(), "OpenBasket Order Confirmation", "order", params);
+        sendMail(order.getEmail(), "BigTree Order Confirmation", "order", params);
     }
 
     public void sendMail(String to, String subject, String template, Map<String, Object> params) {

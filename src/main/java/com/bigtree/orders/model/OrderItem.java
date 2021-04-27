@@ -53,5 +53,32 @@ public class OrderItem extends BaseEntity{
 
     @Column(name = "total", nullable = false)
     private BigDecimal total;
+    @Column(name = "cancellation_requested", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private boolean cancellationRequested;
 
+    @Column(name = "cancellation_approved", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private boolean cancellationApproved;
+
+    @Column(name = "cancellation_declined", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private boolean cancellationDeclined;
+
+    @Column(name = "cancelled", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+    private boolean cancelled;
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "order=" + order +
+                ", image='" + image + '\'' +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", total=" + total +
+                ", cancellationRequested=" + cancellationRequested +
+                ", cancellationApproved=" + cancellationApproved +
+                ", cancellationDeclined=" + cancellationDeclined +
+                ", cancelled=" + cancelled +
+                '}';
+    }
 }

@@ -28,7 +28,7 @@ public class Basket extends BaseEntity{
 	@DateTimeFormat(pattern = "dd-mm-yyyy")
 	private LocalDate date;
 
-	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "basket", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "basket", fetch = FetchType.EAGER)
 	private Set<BasketItem> items;
 
 	@Column(name = "basket_id", nullable = false)
@@ -48,9 +48,9 @@ public class Basket extends BaseEntity{
 		this.items.remove(child);
 	}
 
-	@PreRemove
-	public void dismissChildren() {
-		this.items.forEach(child -> child.dismissParent()); // SYNCHRONIZING THE OTHER SIDE OF RELATIONSHIP
-		this.items.clear();
-	}
+//	@PreRemove
+//	public void dismissChildren() {
+//		this.items.forEach(child -> child.dismissParent()); // SYNCHRONIZING THE OTHER SIDE OF RELATIONSHIP
+//		this.items.clear();
+//	}
 }

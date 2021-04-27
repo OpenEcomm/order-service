@@ -42,7 +42,7 @@ public class BasketController {
             baskets = basketService.findBaskets(qParams);
         }
         List<Basket> basketList = new ArrayList<>();
-        if (baskets != null) {
+        if (!CollectionUtils.isEmpty(baskets)) {
             baskets.forEach(basketList::add);
         }
         log.info("Returning {} baskets ", basketList.size());

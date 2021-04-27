@@ -173,4 +173,14 @@ public class BasketService {
         return false;
     }
 
+    public boolean delete(String email){
+        log.info("Cleaning up the user basket {}", email);
+        Basket basket = basketRepository.findByEmail(email);
+        if ( basket != null){
+            basketRepository.deleteById(basket.getId());
+            return true;
+        }
+        return false;
+    }
+
 }

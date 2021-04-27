@@ -19,5 +19,8 @@ public class ActionResponse {
     private String uniqueId;
     private Integer id;
     private Action action;
+    private String requestDescription;
+    private String responseDescription;
+    private String error;
     private boolean status;
 }

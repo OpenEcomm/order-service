@@ -75,6 +75,6 @@ public class EmailSenderTest {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         Calendar cal = Calendar.getInstance();
         params.put("today", dateFormat.format(cal.getTime()));
-        emailService.sendMail("nava.arul@gmail.com", "Your OpenBasket order #" + order.getReference(), "order", params);
+        emailService.sendMail("nava.arul@gmail.com", "Your BigTree order #" + order.getReference(), "order", params);
     }
 }

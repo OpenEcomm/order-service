@@ -70,6 +70,18 @@ public class Order extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 
+	@Column(name = "cancellation_requested", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+	private boolean cancellationRequested;
+
+	@Column(name = "cancellation_approved", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+	private boolean cancellationApproved;
+
+	@Column(name = "cancellation_declined", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+	private boolean cancellationDeclined;
+
+	@Column(name = "cancelled", columnDefinition="BOOLEAN DEFAULT false", nullable = false)
+	private boolean cancelled;
+
 	@Embedded
 	@AttributeOverrides({ 
 			@AttributeOverride(name = "firstName", column = @Column(name = "first_name")),
@@ -101,6 +113,10 @@ public class Order extends BaseEntity {
 				", subTotal=" + subTotal +
 				", totalCost=" + totalCost +
 				", status=" + status +
+				", cancellationRequested=" + cancellationRequested +
+				", cancellationApproved=" + cancellationApproved +
+				", cancellationDeclined=" + cancellationDeclined +
+				", cancelled=" + cancelled +
 				", address=" + address +
 				", expectedDeliveryDate=" + expectedDeliveryDate +
 				'}';

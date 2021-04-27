@@ -36,20 +36,22 @@ public class OrderService {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    BasketService basketService;
+
     public String create(Order order) {
         Set<OrderItem> items = new HashSet<>(order.getItems());
         log.info("Saving order with {} items", items.size());
         for (OrderItem orderItem : items) {
             orderItem.setOrder(order);
         }
-        // order.setItems(null);
         Long countByDate = orderRepository.countByDate(LocalDate.now());
         order.setReference(buildOrderReference(countByDate.intValue()));
         order.setStatus(OrderStatus.CREATED);
         if (order.getDate() == null) {
             order.setDate(LocalDate.now());
         }
-        if ( order.getCurrency() == null){
+        if (order.getCurrency() == null) {
             order.setCurrency("GBP");
         }
         Order saved = orderRepository.save(order);
@@ -65,6 +67,13 @@ public class OrderService {
                     sendOrderConfirmation(order);
                 }
             }).start();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    basketService.delete(saved.getEmail());
+                }
+            }).start();
+
             return saved.getReference();
         } else {
             log.error("Order not created for user {}", order.getEmail());
@@ -87,7 +96,7 @@ public class OrderService {
     }
 
     private void sendOrderConfirmation(Order order) {
-        String subject = "Your OpenBasket order #" + order.getReference();
+        String subject = "Your BigTree order #" + order.getReference();
         Map<String, Object> body = new HashMap<>();
         body.put("order", order);
         body.put("items", order.getItems());
@@ -137,5 +146,38 @@ public class OrderService {
 
         });
         return result;
+    }
+
+    public boolean cancelItem(Integer itemId) {
+        log.info("Requesting cancellation of an item {}", itemId);
+        Optional<OrderItem> orderItem = itemRepository.findById(itemId);
+        if (orderItem != null && orderItem.isPresent()) {
+            OrderItem item = orderItem.get();
+            item.setCancellationRequested(true);
+            log.info("Request Cancellation success. item {}", itemId);
+            itemRepository.save(item);
+            return true;
+        }
+        log.info("Item {} not found. Cannot request cancellation", itemId);
+        return false;
+    }
+
+    public boolean cancelOrder(Integer orderId) {
+        log.info("Requesting cancellation of an order {}", orderId);
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order != null && order.isPresent()) {
+            Order item = order.get();
+            if (item.getStatus() == OrderStatus.CREATED || item.getStatus() == OrderStatus.PROCESSING) {
+                item.setCancellationRequested(true);
+                log.info("Request Cancellation success. Order {}", orderId);
+                orderRepository.save(item);
+                return true;
+            } else {
+                log.info("Cannot Request Cancellation. Order already {}", item.getStatus());
+                return false;
+            }
+        }
+        log.info("Item {} not found. Cannot request cancellation", orderId);
+        return false;
     }
 }

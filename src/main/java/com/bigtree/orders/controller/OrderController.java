@@ -104,6 +104,27 @@ public class OrderController {
     }
 
     @CrossOrigin(origins = "*")
+    @PutMapping("/orders/{orderId}/items/{itemId}/cancellation")
+    public ResponseEntity<ActionResponse> requestItemCancellation(@PathVariable("orderId") Integer orderId, @PathVariable("itemId") Integer itemId) {
+        log.info("Received request to cancel an item {} in the order {}", itemId, orderId);
+        boolean success = orderService.cancelItem(itemId);
+        return ResponseEntity.ok()
+                .body(ActionResponse.builder().action(Action.UPDATE).status(success).object("Order").id(orderId).build());
+    }
+
+    @CrossOrigin(origins = "*")
+    @PutMapping("/orders/{orderId}/cancellation")
+    public ResponseEntity<ActionResponse> requestOrderCancellation(@PathVariable("orderId") Integer orderId) {
+        log.info("Received request to cancel an order {}", orderId);
+        boolean success = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok()
+                .body(ActionResponse.builder().action(Action.UPDATE)
+                        .requestDescription("Requested to cancel an order")
+                        .responseDescription(success ? "Request successful.": "Request failed")
+                        .status(success).object("Order").id(orderId).build());
+    }
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/orders")
     public ResponseEntity<OrderCreateResponse> create(@RequestBody Order order) {
         log.info("Received request to create new order. {}", order.toString());

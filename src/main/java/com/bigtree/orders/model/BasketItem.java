@@ -24,7 +24,7 @@ import lombok.Setter;
 public class BasketItem extends BaseEntity{
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "basket_id", nullable = false )
     private Basket basket;
     
@@ -49,10 +49,10 @@ public class BasketItem extends BaseEntity{
     @Column(name = "total", nullable = false)
     private BigDecimal total;
 
-    @PreRemove
-    public void dismissParent(){
-        basket.dismissChild(this);
-        basket = null;
-    }
+//    @PreRemove
+//    public void dismissParent(){
+//        basket.dismissChild(this);
+//        basket = null;
+//    }
 
 }
